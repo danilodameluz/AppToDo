@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,15 +19,18 @@ import java.util.UUID;
 public class UserController {
 
     final UserService userService;
+    final PasswordEncoder encoder;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, PasswordEncoder encoder){
         this.userService = userService;
+        this.encoder = encoder;
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto){
+    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto)  {
         var userModel = new UserModel();
         BeanUtils.copyProperties(userDto, userModel);
+        userModel.setUserPassword(encoder.encode(userModel.getUserPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
     }
 

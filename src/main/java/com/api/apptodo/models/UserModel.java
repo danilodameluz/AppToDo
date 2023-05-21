@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_USERS")
+@Table(name = "TB_USER")
 public class UserModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
