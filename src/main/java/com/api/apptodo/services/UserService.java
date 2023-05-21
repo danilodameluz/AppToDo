@@ -36,4 +36,6 @@ public class UserService {
     public void delete(UserModel userModel) {
         userRepository.delete(userModel);
     }
+
+    public Optional<UserModel> findByUserEmail(String userEmail) { return userRepository.findByUserEmail(userEmail);}
 }
