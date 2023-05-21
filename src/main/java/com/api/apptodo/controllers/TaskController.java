@@ -2,6 +2,7 @@ package com.api.apptodo.controllers;
 
 import com.api.apptodo.dto.TaskDto;
 import com.api.apptodo.models.TaskModel;
+import com.api.apptodo.models.enums.Status;
 import com.api.apptodo.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
@@ -27,6 +27,8 @@ public class TaskController {
     public ResponseEntity<Object> saveTask(@RequestBody @Valid TaskDto taskDto){
         var taskModel = new TaskModel();
         BeanUtils.copyProperties(taskDto, taskModel);
+        taskModel.setPriority(taskDto.getPriority().toString());
+        taskModel.setStatus(Status.ABERTA);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
     }
 

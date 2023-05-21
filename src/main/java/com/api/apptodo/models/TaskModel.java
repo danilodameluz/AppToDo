@@ -1,9 +1,7 @@
 package com.api.apptodo.models;
 
+import com.api.apptodo.models.enums.Status;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TB_TASKS")
@@ -19,13 +17,13 @@ public class TaskModel {
     @Column(nullable = false)
     private String userEmail;
     @Column(nullable = false)
-    private String status;
+    private Status status;
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
