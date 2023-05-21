@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if(!userModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if(!userModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");

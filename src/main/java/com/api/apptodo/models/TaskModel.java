@@ -6,13 +6,12 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_TASK")
-public class TaskModel implements Serializable {
-    private static final long serialVersionUID = 1L;
+@Table(name = "TB_TASKS")
+public class TaskModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(nullable = false)
     private String descriptionTask;
     @Column(nullable = false)
@@ -30,11 +29,11 @@ public class TaskModel implements Serializable {
         this.status = status;
     }
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

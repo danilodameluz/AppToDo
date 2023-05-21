@@ -26,7 +26,7 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Optional<TaskModel> findById(UUID id) {
+    public Optional<TaskModel> findById(Integer id) {
         return taskRepository.findById(id);
     }
 
