@@ -28,7 +28,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<UserModel> findById(UUID id) {
+    public Optional<UserModel> findById(Integer id) {
         return userRepository.findById(id);
     }
 

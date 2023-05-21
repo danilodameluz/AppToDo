@@ -36,7 +36,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneTask(@PathVariable(value = "id")UUID id){
+    public ResponseEntity<Object> getOneTask(@PathVariable(value = "id")Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
@@ -45,7 +45,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOneTask(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> deleteOneTask(@PathVariable(value = "id") Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
@@ -55,7 +55,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateTask(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<Object> updateTask(@PathVariable(value = "id") Integer id,
                                              @RequestBody @Valid TaskDto taskDto){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
