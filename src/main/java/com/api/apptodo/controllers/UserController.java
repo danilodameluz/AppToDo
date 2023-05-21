@@ -28,10 +28,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto)  {
-        var userModel = new UserModel();
-        BeanUtils.copyProperties(userDto, userModel);
-        userModel.setUserPassword(encoder.encode(userModel.getUserPassword()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+        Optional<UserModel> userModelOptional = userService.findByUserEmail(userDto.getUserEmail());
+        if(!userModelOptional.isPresent()){
+            var userModel = new UserModel();
+            BeanUtils.copyProperties(userDto, userModel);
+            userModel.setUserPassword(encoder.encode(userModel.getUserPassword()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
     }
 
     @GetMapping
@@ -56,6 +60,22 @@ public class UserController {
         }
         userService.delete(userModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted sucessfully");
+    }
+
+    @GetMapping("/{id}/validausuario")
+    public ResponseEntity<Boolean> validationUser(@PathVariable(value = "id") Integer id,
+                                                  @RequestParam String userEmail,
+                                                  @RequestParam String password){
+        Optional<UserModel> userModelOptional = userService.findByUserEmail(userEmail);
+        if(!userModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }
+
+        UserModel userModel = userModelOptional.get();
+        boolean valid = encoder.matches(password, userModel.getUserPassword());
+
+        HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(valid);
     }
 
 }
