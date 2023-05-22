@@ -19,7 +19,6 @@ Repositório público [App-To-Do](https://github.com/danilodameluz/app-to-do.git
 ### `Swagger`
 Utilizado OpenAPI para criação da documentação pelo [Swagger](http://localhost:8080/swagger-ui/index.html#/)
 
-
 ## Informações Úteis
 
 - O banco de dados é carregado em memória a partir da inicialização da aplicação.
