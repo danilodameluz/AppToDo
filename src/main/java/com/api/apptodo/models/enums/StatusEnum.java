@@ -1,5 +1,5 @@
 package com.api.apptodo.models.enums;
 
-public enum Status {
+public enum StatusEnum {
     ABERTA, FINALIZADA;
 }

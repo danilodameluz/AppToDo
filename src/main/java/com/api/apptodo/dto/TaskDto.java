@@ -1,6 +1,6 @@
 package com.api.apptodo.dto;
 
-import com.api.apptodo.models.enums.Priority;
+import com.api.apptodo.models.enums.PriorityEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,7 +9,7 @@ public class TaskDto {
     @NotBlank
     private String descriptionTask;
     @NotNull
-    private Priority priority;
+    private PriorityEnum priority;
     @NotBlank
     private String userEmail;
 
@@ -29,11 +29,11 @@ public class TaskDto {
         this.descriptionTask = descriptionTask;
     }
 
-    public Priority getPriority() {
+    public PriorityEnum getPriority() {
         return priority;
     }
 
-    public void setPriority(Priority priority) {
+    public void setPriority(PriorityEnum priority) {
         this.priority = priority;
     }
 }

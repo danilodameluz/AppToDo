@@ -1,5 +1,5 @@
 package com.api.apptodo.models.enums;
 
-public enum Priority {
+public enum PriorityEnum {
     ALTA, MEDIA, BAIXA;
 }
