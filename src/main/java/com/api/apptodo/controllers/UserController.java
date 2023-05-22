@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
     final UserService userService;
@@ -26,20 +25,24 @@ public class UserController {
         this.encoder = encoder;
     }
 
-    @PostMapping
+    @RequestMapping(path = "/user", method = RequestMethod.POST)
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto)  {
-        var userModel = new UserModel();
-        BeanUtils.copyProperties(userDto, userModel);
-        userModel.setUserPassword(encoder.encode(userModel.getUserPassword()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+        Optional<UserModel> userModelOptional = userService.findByUserEmail(userDto.getUserEmail());
+        if(!userModelOptional.isPresent()){
+            var userModel = new UserModel();
+            BeanUtils.copyProperties(userDto, userModel);
+            userModel.setUserPassword(encoder.encode(userModel.getUserPassword()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
     }
 
-    @GetMapping
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseEntity<List<UserModel>> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if(!userModelOptional.isPresent()){
@@ -48,7 +51,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if(!userModelOptional.isPresent()){
@@ -56,6 +59,22 @@ public class UserController {
         }
         userService.delete(userModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted sucessfully");
+    }
+
+    @RequestMapping(path = "/user/{id}/validausuario", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> validationUser(@PathVariable(value = "id") Integer id,
+                                                  @RequestParam String userEmail,
+                                                  @RequestParam String password){
+        Optional<UserModel> userModelOptional = userService.findByUserEmail(userEmail);
+        if(!userModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }
+
+        UserModel userModel = userModelOptional.get();
+        boolean valid = encoder.matches(password, userModel.getUserPassword());
+
+        HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(valid);
     }
 
 }
