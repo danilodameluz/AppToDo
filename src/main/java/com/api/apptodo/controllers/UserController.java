@@ -3,6 +3,7 @@ package com.api.apptodo.controllers;
 import com.api.apptodo.dto.UserDto;
 import com.api.apptodo.models.UserModel;
 import com.api.apptodo.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class UserController {
         this.encoder = encoder;
     }
 
+    @Operation(summary = "Inclusão de um novo usuário")
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto)  {
         Optional<UserModel> userModelOptional = userService.findByUserEmail(userDto.getUserEmail());
@@ -37,11 +39,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
     }
 
+    @Operation(summary = "Exibe listagem de usuários cadastrados")
     @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseEntity<List<UserModel>> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
+    @Operation(summary = "Exibe um usuário em específico")
     @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -51,6 +55,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
     }
 
+    @Operation(summary = "Deleta um usuário")
     @RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "id") Integer id){
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -61,6 +66,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User deleted sucessfully");
     }
 
+    @Operation(summary = "Validação dos dados de um usuário de acordo com email e senha fornecidos")
     @RequestMapping(path = "/user/{id}/validausuario", method = RequestMethod.GET)
     public ResponseEntity<Boolean> validationUser(@PathVariable(value = "id") Integer id,
                                                   @RequestParam String userEmail,
