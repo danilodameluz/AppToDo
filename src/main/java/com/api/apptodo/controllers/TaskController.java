@@ -28,7 +28,7 @@ public class TaskController {
         var taskModel = new TaskModel();
         BeanUtils.copyProperties(taskDto, taskModel);
         taskModel.setPriority(taskDto.getPriority().toString());
-        taskModel.setStatus(Status.ABERTA);
+        taskModel.setStatus(Status.ABERTA.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
     }
 
@@ -69,6 +69,4 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
 
     }
-
-
 }
