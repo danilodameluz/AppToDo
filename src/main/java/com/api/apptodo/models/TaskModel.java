@@ -1,6 +1,5 @@
 package com.api.apptodo.models;
 
-import com.api.apptodo.models.enums.Status;
 import jakarta.persistence.*;
 
 @Entity
