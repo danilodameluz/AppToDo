@@ -35,8 +35,8 @@ public class TaskController {
 
     @Operation(summary = "Exibe listagem de Tarefas a serem concluídas")
     @RequestMapping(path = "/task", method = RequestMethod.GET)
-    public ResponseEntity<List<TaskModel>> getAllTasks(String status){
-        status = "ABERTA";
+    public ResponseEntity<List<TaskModel>> getAllTasks(){
+        String status = "ABERTA";
         return ResponseEntity.status(HttpStatus.OK).body(taskService.findByStatus(status));
     }
 
