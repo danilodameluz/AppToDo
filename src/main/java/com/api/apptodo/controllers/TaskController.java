@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/task")
 public class TaskController {
 
     final TaskService taskService;
@@ -23,7 +22,7 @@ public class TaskController {
         this.taskService= taskService;
     }
 
-    @PostMapping
+    @RequestMapping(path = "/task", method = RequestMethod.POST)
     public ResponseEntity<Object> saveTask(@RequestBody @Valid TaskDto taskDto){
         var taskModel = new TaskModel();
         BeanUtils.copyProperties(taskDto, taskModel);
@@ -32,12 +31,12 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
     }
 
-    @GetMapping
+    @RequestMapping(path = "/task", method = RequestMethod.GET)
     public ResponseEntity<List<TaskModel>> getAllTasks(){
         return ResponseEntity.status(HttpStatus.OK).body(taskService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getOneTask(@PathVariable(value = "id")Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
@@ -46,7 +45,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(taskModelOptional.get());
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteOneTask(@PathVariable(value = "id") Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
@@ -56,7 +55,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body("Task deleted sucessfully");
     }
 
-    @PutMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateTask(@PathVariable(value = "id") Integer id,
                                              @RequestBody @Valid TaskDto taskDto){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
