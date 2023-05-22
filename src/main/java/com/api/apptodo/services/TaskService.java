@@ -34,4 +34,6 @@ public class TaskService {
     public void delete(TaskModel taskModel) {
         taskRepository.delete(taskModel);
     }
+
+    public List<TaskModel> findByStatus(String status){ return taskRepository.findByStatus(status);}
 }
