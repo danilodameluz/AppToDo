@@ -2,6 +2,7 @@ package com.api.apptodo.controllers;
 
 import com.api.apptodo.dto.TaskDto;
 import com.api.apptodo.models.TaskModel;
+import com.api.apptodo.models.enums.Status;
 import com.api.apptodo.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -11,10 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/task")
 public class TaskController {
 
     final TaskService taskService;
@@ -23,19 +22,21 @@ public class TaskController {
         this.taskService= taskService;
     }
 
-    @PostMapping
+    @RequestMapping(path = "/task", method = RequestMethod.POST)
     public ResponseEntity<Object> saveTask(@RequestBody @Valid TaskDto taskDto){
         var taskModel = new TaskModel();
         BeanUtils.copyProperties(taskDto, taskModel);
+        taskModel.setPriority(taskDto.getPriority().toString());
+        taskModel.setStatus(Status.ABERTA.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
     }
 
-    @GetMapping
+    @RequestMapping(path = "/task", method = RequestMethod.GET)
     public ResponseEntity<List<TaskModel>> getAllTasks(){
         return ResponseEntity.status(HttpStatus.OK).body(taskService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getOneTask(@PathVariable(value = "id")Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
@@ -44,7 +45,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(taskModelOptional.get());
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteOneTask(@PathVariable(value = "id") Integer id){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
         if(!taskModelOptional.isPresent()){
@@ -54,7 +55,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body("Task deleted sucessfully");
     }
 
-    @PutMapping("/{id}")
+    @RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateTask(@PathVariable(value = "id") Integer id,
                                              @RequestBody @Valid TaskDto taskDto){
         Optional<TaskModel> taskModelOptional = taskService.findById(id);
@@ -67,6 +68,4 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(taskModel));
 
     }
-
-
 }

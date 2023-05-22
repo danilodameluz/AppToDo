@@ -1,9 +1,7 @@
 package com.api.apptodo.models;
 
+import com.api.apptodo.models.enums.Status;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TB_TASKS")
